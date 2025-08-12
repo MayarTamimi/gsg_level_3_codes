@@ -1,37 +1,51 @@
- +-- -- --++-- +-In the name of ALLAH-+ --++-- -- --+
+// +-- -- --++-- +-In the name of ALLAH-+ --++-- -- --+
 
-#include bitsstdc++.h
+#include <bits/stdc++.h>
 using namespace std;
 
 int n;
-vectorstring activities = {swimming, running, football};
-vectorstring res;
-int countSchedules = 0;
+int cnt = 0;
 
-void solve(int m) {
-    if (m == n) {
-        for (int i = 0; i  n; i++) {
-            cout  res[i];
-            if (i != n - 1) cout   ;
+void recur(int x, vector<string> cur) {
+    if (x == n) {
+        for (const string& s : cur) {
+            cout << s << " ";
         }
-        cout  n;
-        countSchedules++;
+        cout << endl;
+        cnt++;
         return;
     }
-    for (int i = 0; i  3; i++) {
-        if (m == 0  res[m - 1] != activities[i]) {
-            res.push_back(activities[i]);
-            solve(m + 1);
-            res.pop_back();
-        }
+
+    vector<string> A = cur;
+    A.push_back("Running");
+    vector<string> B = cur;
+    B.push_back("Swimming");
+    vector<string> C = cur;
+    C.push_back("Football");
+
+    if (cur.empty()) {
+        recur(x + 1, A);
+        recur(x + 1, B);
+        recur(x + 1, C);
+    } else if (cur.back() == "Running") {
+        recur(x + 1, B);
+        recur(x + 1, C);
+    } else if (cur.back() == "Swimming") {
+        recur(x + 1, A);
+        recur(x + 1, C);
+    } else if (cur.back() == "Football") {
+        recur(x + 1, A);
+        recur(x + 1, B);
     }
 }
 
 int main() {
-    ios_basesync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    cin  n;
-    solve(0);
-    cout  COUNT   countSchedules  n;
+    cin >> n;
+    recur(0, {});
+    cout << "COUNT: " << cnt << endl;
+
+    return 0;
 }
